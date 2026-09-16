@@ -19,13 +19,16 @@ Docker
 
 Формат сдачи:
 - Собранный образ необходимо запушить в docker hub и дать ссылку на ваш репозиторий.
+> https://hub.docker.com/repository/docker/psmirnoff1975/nginx-custom/general
+
+https://hub.docker.com/repository/docker/psmirnoff1975/nginx-custom/general
 
 # Среда выполнения
   VirtualBox 7.0.10, ВМ - Ubuntu 24.04
 
 # Команды и описание действий
 
-> для начала, согласно рекомендациям https://docs.docker.com/engine/install/ubuntu/ удалим старые версии пакетов, если таковые имеются
+> для начала, согласно рекомендациям по установке (https://docs.docker.com/engine/install/ubuntu/) удалим старые версии пакетов, если таковые имеются
 
 ```
 root@srv1:~#
