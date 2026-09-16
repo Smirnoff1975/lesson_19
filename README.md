@@ -21,7 +21,7 @@ Docker
 - Собранный образ необходимо запушить в docker hub и дать ссылку на ваш репозиторий.
 
 # Среда выполнения
-  Хост машина - OS Windows 10, VirtualBox 7.0.10, ВМ - Ubuntu 24.04
+  VirtualBox 7.0.10, ВМ - Ubuntu 24.04
 
 # Команды и описание действий
 
@@ -212,6 +212,10 @@ FROM nginx:stable-alpine
 LABEL lbl="Lesson nginx:stable-alpine"
 COPY index.html /usr/share/nginx/html
 root@srv1:~/docker#
+```
+> все готово, соберем образ
+
+```
 root@srv1:~/docker# docker build -t nginx-custom .
 [+] Building 17.6s (7/7) FINISHED                                                                    docker:default
  => [internal] load build definition from dockerfile                                                           0.0s
@@ -253,6 +257,10 @@ root@srv1:~/docker#
 root@srv1:~/docker#
 root@srv1:~/docker#
 root@srv1:~/docker#
+```
+> Проверим результат, запустив контейнер на его основе, пробросив порт 777 хоста на порт 80 контейнера. После запуска убедимся , что curl возвращает пользовательскую страницу
+
+```
 root@srv1:~/docker#
 root@srv1:~/docker# docker run -dt --name doc1 -p 777:80 nginx-custom
 bd3c36bec34c955195fea44ec8a157766c1b15db7c54c285bff1bafb55ac9c57
@@ -276,9 +284,10 @@ root@srv1:~/docker# curl localhost:777
 </html>
 root@srv1:~/docker#
 
+<img width="698" height="491" alt="image" src="https://github.com/user-attachments/assets/32511de2-0c85-43bb-b65d-4081947d3e11" />
 
 
-========================
+> Размещение образа на docker hub. Пересоберем образ включив в имя образа логин на хабе и тег с версией. Перед размещение проверим, что ничего не поломалось
 
 root@srv1:~# cd docker/
 root@srv1:~/docker# ls
@@ -352,7 +361,38 @@ doc2
 root@srv1:~/docker#
 root@srv1:~/docker#
 root@srv1:~/docker#
+root@srv1:~/docker#
+root@srv1:~/docker#
+root@srv1:~/docker#
+root@srv1:~/docker#
+root@srv1:~/docker# docker login -u psmirnoff1975
 
+i Info → A Personal Access Token (PAT) can be used instead.
+         To create a PAT, visit https://app.docker.com/settings
+
+
+Password:
+
+WARNING! Your credentials are stored unencrypted in '/root/.docker/config.json'.
+Configure a credential helper to remove this warning. See
+https://docs.docker.com/go/credential-store/
+
+Login Succeeded
+root@srv1:~/docker# docker image push psmirnoff1975/nginx-custom:1.0.0
+The push refers to repository [docker.io/psmirnoff1975/nginx-custom]
+f8c729e843ef: Pushed
+44136fa355b3: Pushed
+d57a2d5adcf6: Pushed
+55afa1ecc21d: Pushed
+a9e7aa0bb73b: Pushed
+da8b0d805e5c: Pushed
+16720f76a6c9: Pushed
+f709c26bfc6a: Pushed
+aac3a72f1123: Pushed
+c54fe1bc3d0f: Pushed
+0a7c78954450: Pushed
+1.0.0: digest: sha256:13d0e28b29018c5e5183c9a8ee389038949d289aec690a73ab144ef3251c5060 size: 856
+root@srv1:~/docker#
 ```
 
 
@@ -670,5 +710,36 @@ doc2
 root@srv1:~/docker#
 root@srv1:~/docker#
 root@srv1:~/docker#
+root@srv1:~/docker#
+root@srv1:~/docker#
+root@srv1:~/docker#
+root@srv1:~/docker#
+root@srv1:~/docker# docker login -u psmirnoff1975
 
+i Info → A Personal Access Token (PAT) can be used instead.
+         To create a PAT, visit https://app.docker.com/settings
+
+
+Password:
+
+WARNING! Your credentials are stored unencrypted in '/root/.docker/config.json'.
+Configure a credential helper to remove this warning. See
+https://docs.docker.com/go/credential-store/
+
+Login Succeeded
+root@srv1:~/docker# docker image push psmirnoff1975/nginx-custom:1.0.0
+The push refers to repository [docker.io/psmirnoff1975/nginx-custom]
+f8c729e843ef: Pushed
+44136fa355b3: Pushed
+d57a2d5adcf6: Pushed
+55afa1ecc21d: Pushed
+a9e7aa0bb73b: Pushed
+da8b0d805e5c: Pushed
+16720f76a6c9: Pushed
+f709c26bfc6a: Pushed
+aac3a72f1123: Pushed
+c54fe1bc3d0f: Pushed
+0a7c78954450: Pushed
+1.0.0: digest: sha256:13d0e28b29018c5e5183c9a8ee389038949d289aec690a73ab144ef3251c5060 size: 856
+root@srv1:~/docker#
 ```
