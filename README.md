@@ -24,7 +24,23 @@ Docker
   Хост машина - OS Windows 10, VirtualBox 7.0.10, ВМ - Ubuntu 24.04
 
 # Команды и описание действий
+
+> для начала, согласно рекомендациям https://docs.docker.com/engine/install/ubuntu/ удалим старые версии пакетов, если таковые имеются
+
 ```
+root@srv1:~#
+root@srv1:~# apt remove $(dpkg --get-selections docker.io docker-compose docker-compose-v2 docker-doc docker-buildx podman-docker containerd runc | cut -f1)
+dpkg: no packages found matching docker-compose
+dpkg: no packages found matching docker-compose-v2
+dpkg: no packages found matching docker-doc
+dpkg: no packages found matching docker-buildx
+dpkg: no packages found matching podman-docker
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+0 upgraded, 0 newly installed, 0 to remove and 171 not upgraded.
+root@srv1:~#
+root@srv1:~#
 root@srv1:~#
 root@srv1:~# apt update
 Hit:1 http://ru.archive.ubuntu.com/ubuntu noble InRelease
@@ -35,6 +51,9 @@ Reading package lists... Done
 Building dependency tree... Done
 Reading state information... Done
 171 packages can be upgraded. Run 'apt list --upgradable' to see them.
+```
+> установим корневые сертификаты и утилиту curl если ее нет
+```
 root@srv1:~# apt install ca-certificates curl
 Reading package lists... Done
 Building dependency tree... Done
@@ -46,6 +65,10 @@ The following package was automatically installed and is no longer required:
   pigz
 Use 'apt autoremove' to remove it.
 0 upgraded, 0 newly installed, 0 to remove and 171 not upgraded.
+```
+> добавим для apt источник на download.docker.com и скачаем pgp ключ для проверки подлинности пакетов
+
+```
 root@srv1:~# install -m 0755 -d /etc/apt/keyrings
 root@srv1:~# curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
 root@srv1:~# ls -l /etc/apt/keyrings/
@@ -86,6 +109,10 @@ Reading package lists... Done
 Building dependency tree... Done
 Reading state information... Done
 171 packages can be upgraded. Run 'apt list --upgradable' to see them.
+```
+> теперь приступим к установке docker, docker-compose и сопутствующих утилит
+
+```
 root@srv1:~# apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 Reading package lists... Done
 Building dependency tree... Done
@@ -148,6 +175,10 @@ No containers need to be restarted.
 No user sessions are running outdated binaries.
 
 No VM guests are running outdated hypervisor (qemu) binaries on this host.
+```
+> готово, проверим что docker нам откликается
+
+```
 root@srv1:~#
 root@srv1:~#
 root@srv1:~# docker ps
@@ -155,6 +186,9 @@ CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
 root@srv1:~#
 root@srv1:~# pwd
 /root
+```
+> создадим папку проекта и в ней создадим файлы dockerfile и index.html для подмены страницы nginx по умолчанию
+```
 root@srv1:~# mkdir docker && cd docker
 root@srv1:~/docker# cat > index.html
 <html>
@@ -321,9 +355,30 @@ root@srv1:~/docker#
 
 ```
 
+
+
+
+
+
+
+
+
 # Протокол работы
 
 ```
+root@srv1:~#
+root@srv1:~# apt remove $(dpkg --get-selections docker.io docker-compose docker-compose-v2 docker-doc docker-buildx podman-docker containerd runc | cut -f1)
+dpkg: no packages found matching docker-compose
+dpkg: no packages found matching docker-compose-v2
+dpkg: no packages found matching docker-doc
+dpkg: no packages found matching docker-buildx
+dpkg: no packages found matching podman-docker
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+0 upgraded, 0 newly installed, 0 to remove and 171 not upgraded.
+root@srv1:~#
+root@srv1:~#
 root@srv1:~#
 root@srv1:~# apt update
 Hit:1 http://ru.archive.ubuntu.com/ubuntu noble InRelease
@@ -540,11 +595,9 @@ root@srv1:~/docker# curl localhost:777
 </body>
 </html>
 root@srv1:~/docker#
-
-
-
-========================
-
+```
+> Размещение образа на docker hub. Пересоберем образ включив в имя образа логин на хабе и тег с версией. Перед размещение проверим, что ничего не поломалось
+```
 root@srv1:~# cd docker/
 root@srv1:~/docker# ls
 dockerfile  index.html
