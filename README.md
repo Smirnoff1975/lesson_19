@@ -290,12 +290,12 @@ root@srv1:~/docker# curl localhost:777
 </body>
 </html>
 root@srv1:~/docker#
-
+```
 <img width="698" height="491" alt="image" src="https://github.com/user-attachments/assets/32511de2-0c85-43bb-b65d-4081947d3e11" />
 
 
 > Размещение образа на docker hub. Пересоберем образ включив в имя образа логин на хабе и тег с версией. Перед размещение проверим, что ничего не поломалось
-
+```
 root@srv1:~# cd docker/
 root@srv1:~/docker# ls
 dockerfile  index.html
